@@ -151,10 +151,15 @@ Update the following snippets to make use of `useEffect`
 const App = () => {
   const [count, setCount] = React.useState(0);
 
-  document.title = `You have clicked ${count} times`;
+  React.useEffect(() => {                                     //Added this code in
+    document.title = `You have clicked ${count} times`;
+  }, [count]);)
+;
 
-  return <button onClick={() => setCount(count + 1)}>Increment</button>;
-};
+  return (
+    <button onClick={() => setCount(count + 1)}>Increment</button>
+  );
+}
 ```
 
 ---
@@ -163,6 +168,10 @@ const App = () => {
 const App = ({ color }) => {
   const [value, setValue] = React.useState(false);
 
+  React.useEffect(() => {
+    window.localStorage.setItem(`value`, value);
+    window.localStorage.setItem(`color`, color);
+  });
   window.localStorage.setItem("value", value);
   window.localStorage.setItem("color", color);
 
@@ -187,6 +196,22 @@ const Modal = ({ handleClose }) => {
 
   return <div>Modal stuff</div>;
 };
+
+
+//vvvvvvvvvvvvvvvv The changes were you don't need to re-render
+
+const Modal = ({ handleClose} => {
+  React.useEffect(() => {
+    window.addEventListener(`keydown`, (ev) => {if (ev.code === `Escape`) {
+      handleClose();
+    }
+    });
+  }, []);
+
+  return (
+    <div> Modal stuff</div>
+  );
+}
 ```
 
 ---
