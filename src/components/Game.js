@@ -3,10 +3,7 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import Item from "./Item";
 import cookieSrc from "../cookie.svg";
-
-const handleClick = () => {
-  console.log("Clicked");
-};
+import { useState } from "react";
 
 const items = [
   { id: "cursor", name: "Cursor", cost: 10, value: 1 },
@@ -15,11 +12,29 @@ const items = [
 ];
 
 const Game = () => {
-  const numCookies = 100;
-  const purchasedItems = {
+  const [numCookies, setCookies] = React.useState(100);
+
+  const [purchasedItems, setPurchasedItems] = React.useState({
     cursor: 0,
     grandma: 0,
     farm: 0,
+  });
+
+  function increaseCookiesClick() {
+    setCookies((prevCount) => prevCount + 1);
+  }
+
+  const handleClick = (name, cost, value) => {
+    const itemSelect = purchasedItems;
+    itemSelect[name.toLowerCase()] += 1;
+    setPurchasedItems(itemSelect);
+    if (cost <= numCookies) {
+      console.log(itemSelect);
+      setCookies(numCookies - cost);
+    } else {
+      alert("No bueno!");
+      console.log("Bad");
+    }
   };
 
   return (
@@ -30,7 +45,7 @@ const Game = () => {
           {/* TODO: Calcuate the cookies per second and show it here: */}
           <strong>0</strong> cookies per second
         </Indicator>
-        <Button>
+        <Button onClick={increaseCookiesClick}>
           <Cookie src={cookieSrc} />
         </Button>
       </GameArea>
@@ -43,7 +58,7 @@ const Game = () => {
               name={item.name}
               cost={item.cost}
               value={item.value}
-              purchasedItems={purchasedItems}
+              purchasedItems={[purchasedItems, setPurchasedItems]}
               handleClick={handleClick}
             />
           );

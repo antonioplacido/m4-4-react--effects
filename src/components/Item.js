@@ -10,12 +10,15 @@ const ItemButton = styled.button`
 
 const Item = (props) => {
   const purchaseQuant = props.name.toLowerCase();
+  const updatePurchaseQuant = props.purchasedItems[0][purchaseQuant];
   return (
-    <ItemButton onClick={() => props.handleClick()}>
+    <ItemButton
+      onClick={() => props.handleClick(props.name, props.cost, props.value)}
+    >
       <p>{props.name}</p>
       <p>{props.value}</p>
       <p>{props.cost}</p>
-      <p>{props.purchasedItems[purchaseQuant]}</p>
+      <p>{updatePurchaseQuant}</p>
     </ItemButton>
   );
 };
